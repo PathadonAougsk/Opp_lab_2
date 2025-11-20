@@ -1,5 +1,4 @@
 import csv
-import os
 from pathlib import Path
 from types import LambdaType
 
@@ -84,15 +83,15 @@ class Table:
 
 loader = DataLoader()
 cities = loader.load_csv("Cities.csv")
-table1 = Table("cities", cities)
+table1 = Table("cities_filtered", cities)
 countries = loader.load_csv("Countries.csv")
-table2 = Table("countries", countries)
+table2 = Table("countries_filtered", countries)
 
 my_DB = DB()
 my_DB.insert(table1)
 my_DB.insert(table2)
 
-my_table1 = my_DB.search("cities")
+my_table1 = my_DB.search("cities_filtered")
 print("List all cities in Italy:")
 my_table1_filtered = my_table1.filter(lambda x: x["country"] == "Italy")
 print(my_table1_filtered)
@@ -102,7 +101,7 @@ print("Average temperature for all cities in Italy:")
 print(my_table1_filtered.aggregate(lambda x: sum(x) / len(x), "temperature"))
 print()
 
-my_table2 = my_DB.search("countries")
+my_table2 = my_DB.search("countries_filtered")
 print("List all non-EU countries:")
 my_table2_filtered = my_table2.filter(lambda x: x["EU"] == "no")
 print(my_table2_filtered)
@@ -137,4 +136,3 @@ my_table3_filtered = my_table3.filter(lambda x: x["EU"] == "yes").filter(
 )
 print("Min temp:", my_table3_filtered.aggregate(lambda x: min(x), "temperature"))
 print("Max temp:", my_table3_filtered.aggregate(lambda x: max(x), "temperature"))
-print()
